@@ -19,9 +19,9 @@ function getCurrentDir() {
 }
 
 current_dir=$(getCurrentDir)
-source $current_dir/functions.sh
 WELCOME_MESSAGE="${current_dir}/welcome_message"
 PUBLIC_SSH_KEY="${current_dir}/publickey"
+source $current_dir/functions.sh
 
 # =========== action =========
 # update system
