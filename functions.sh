@@ -39,8 +39,8 @@ function addUser(){
 
    # check if user already exists
 	 apt-get remove --purge unscd
-	 if [ $(getent passwd | grep -c "^$USERNAME:") ]; then
-		 echo "User $USERNAME already exists. Delete $USERNAME or exit?"
+	 if grep -c "^$USERNAME:" /etc/passwd > /dev/null 2>&1; then
+		 echo "User $USERNAME already exists. Delete $USERNAME or exit?[1/2]"
 		 select op in "Delete" "Exit"; do
 	       case $op in
 	           Delete ) userdel -r $USERNAME;
@@ -152,7 +152,7 @@ function installDocker(){
    apt-get update
    apt-get install docker-ce
    # run docker as non-root
-	 if ! grep -q "^docker:" /etc/group;
+	 if ! grep -q "^docker:" /etc/group > /dev/null 2>&1;
 	 then groupadd docker
    fi
    usermod -aG docker $USERNAME
