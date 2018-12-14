@@ -35,10 +35,10 @@ function addUser() {
 	 clear
 	 echo "Did you set your root password?[1/2]"
 	 select op in "Yes" "NO"; do
-			 case $op in
-					 Yes ) break;;
-					 NO ) passwd root;break;;
-			 esac
+		 case $op in
+			 Yes ) break;;
+			 NO ) passwd root;break;;
+		 esac
 	 done
    # change host name and welcome message
    echo "$HOST_NAME" > /etc/hostname
@@ -51,8 +51,8 @@ function addUser() {
 		 select op in "Delete" "Exit"; do
 	       case $op in
 	           Delete ) userdel -r $USERNAME;
-						 					sed -i "/AllowUsers $USERNAME/d" /etc/ssh/sshd_config;
-						 					echo "Ok, User $USERNAME is deleted, will continue..."; break;;
+						          sed -i "/AllowUsers $USERNAME/d" /etc/ssh/sshd_config;
+											echo "Ok, User $USERNAME is deleted, will continue..."; break;;
 	           Exit ) exit;;
 	       esac
 	   done
@@ -127,79 +127,79 @@ function addUser() {
 }
 
 function installOpenVPN() {
-	 clear
-   echo "########## OpenVPN Installation ##########"
-   echo "Please specify the port you want for OpenVPN, and later you will be asked again"
-   read -p "Port number: " port
-   ufw allow $port
-	 apt-get install curl
-   curl -O https://raw.githubusercontent.com/Angristan/openvpn-install/master/openvpn-install.sh
-   chmod +x openvpn-install.sh
-   ./openvpn-install.sh && \
-	 rm ./openvpn-install.sh
+	clear
+	echo "########## OpenVPN Installation ##########"
+	echo "Please specify the port you want for OpenVPN, and later you will be asked again"
+	read -p "Port number: " port
+	ufw allow $port
+	apt-get install curl
+	curl -O https://raw.githubusercontent.com/Angristan/openvpn-install/master/openvpn-install.sh
+	chmod +x openvpn-install.sh
+	./openvpn-install.sh && \
+	rm ./openvpn-install.sh
 }
 
 function installIPsec() {
-	 clear
-	 echo "########## IPsec/L2TP Installation ##########"
-   ufw allow 500
-   ufw allow 1701
-   ufw allow 4500
-   wget https://git.io/vpnsetup -O vpnsetup.sh && sh vpnsetup.sh && \
-	 rm vpnsetup.sh
+	clear
+	echo "########## IPsec/L2TP Installation ##########"
+	ufw allow 500
+	ufw allow 1701
+	ufw allow 4500
+	wget https://git.io/vpnsetup -O vpnsetup.sh && sh vpnsetup.sh && \
+	rm vpnsetup.sh
 }
 
 function installDocker() {
-	 clear
-	 echo "########## Docker Installation ##########"
-   #uninstall old versions
-   # apt-get remove docker docker-engine docker.io
-   apt-get install \
-        apt-transport-https \
-        ca-certificates \
-        curl \
-        gnupg2 \
-        software-properties-common
-   curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
-   add-apt-repository \
-      "deb [arch=amd64] https://download.docker.com/linux/debian \
-      $(lsb_release -cs) \
-      stable"
-   apt-get update
-   apt-get install docker-ce
-   # run docker as non-root
-	 if ! grep -q "^docker:" /etc/group > /dev/null 2>&1;
-	 then groupadd docker
-   fi
-   usermod -aG docker $USERNAME
+	clear
+	echo "########## Docker Installation ##########"
+	#uninstall old versions
+	# apt-get remove docker docker-engine docker.io
+	apt-get install \
+	    apt-transport-https \
+	    ca-certificates \
+	    curl \
+	    gnupg2 \
+	    software-properties-common
+	curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+	add-apt-repository \
+	  "deb [arch=amd64] https://download.docker.com/linux/debian \
+	  $(lsb_release -cs) \
+	  stable"
+	apt-get update
+	apt-get install docker-ce
+	# run docker as non-root
+	if ! grep -q "^docker:" /etc/group > /dev/null 2>&1;
+  	then groupadd docker
+	fi
+	usermod -aG docker $USERNAME
 }
 
 function installCloudTorrent() {
-	 clear
-   echo "########## Cloud-Torrent Installation ##########"
-   read -p "Please enter web auth user name: " username
-   read -p "Please enter web auth user password: " password
-   read -p "Please enter web port: " port
-   mkdir /home/$USERNAME/download
-   chown -R $USERNAME:users /home/$USERNAME/download
-   docker run --user $(id -u $USERNAME):$(id -g $USERNAME) -d -p $port:$port \
-   -v /home/$USERNAME/download:/downloads jpillora/cloud-torrent --port $port -a "$username:$password"
-   #ufw allow 50007 # incoming port
+	clear
+	echo "########## Cloud-Torrent Installation ##########"
+	read -p "Please enter web auth user name: " username
+	read -p "Please enter web auth user password: " password
+	read -p "Please enter web port: " port
+	mkdir /home/$USERNAME/download
+	chown -R $USERNAME:users /home/$USERNAME/download
+	docker run --user $(id -u $USERNAME):$(id -g $USERNAME) -d -p $port:$port \
+	-v /home/$USERNAME/download:/downloads jpillora/cloud-torrent --port $port -a "$username:$password"
+	#ufw allow 50007 # incoming port
 }
 
 function installBaiduPCsGo() {
-	 clear
-	 echo "########## BaiduPCS-Go Installation ##########"
-	 apt-get install p7zip-full
-   mkdir /home/$USERNAME/baidupcs
-   cd /home/$USERNAME/baidupcs
-   wget https://github.com/iikira/BaiduPCS-Go/releases/download/v3.5.6/BaiduPCS-Go-v3.5.6-linux-amd64.zip
-   7z e *.zip
-   rm -r ./BaiduPCS-Go-v*
-   chown -R $USERNAME:users /home/$USERNAME/baidupcs
-   ./BaiduPCS-Go config set -appid 265486
-   ./BaiduPCS-Go config set -enable_https=true
-   ./BaiduPCS-Go config set -cache_size 100000 -max_parallel 300 -savedir /home/$USERNAME/download
+	clear
+	echo "########## BaiduPCS-Go Installation ##########"
+	apt-get install p7zip-full
+	mkdir /home/$USERNAME/baidupcs
+	cd /home/$USERNAME/baidupcs
+	wget https://github.com/iikira/BaiduPCS-Go/releases/download/v3.5.6/BaiduPCS-Go-v3.5.6-linux-amd64.zip
+	7z e *.zip
+	rm -r ./BaiduPCS-Go-v*
+	chown -R $USERNAME:users /home/$USERNAME/baidupcs
+	./BaiduPCS-Go config set -appid 265486
+	./BaiduPCS-Go config set -enable_https=true
+	./BaiduPCS-Go config set -cache_size 100000 -max_parallel 300 -savedir /home/$USERNAME/download
 }
 
 #function installWebhook() {
