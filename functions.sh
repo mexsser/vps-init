@@ -25,7 +25,13 @@ function Menu () {
 	esac
 }
 
-function addUser(){
+function getCurrentDir() {
+    local current_dir="${BASH_SOURCE%/*}"
+    if [[ ! -d "${current_dir}" ]]; then current_dir="$PWD"; fi
+    echo "${current_dir}"
+}
+
+function addUser() {
 	 clear
 	 echo "Did you set your root password?[1/2]"
 	 select op in "Yes" "NO"; do
@@ -63,7 +69,7 @@ function addUser(){
    mkdir /home/$USERNAME/.ssh
    chmod 700 /home/$USERNAME/.ssh
    touch /home/$USERNAME/.ssh/authorized_keys
-   echo "$PUBLIC_SSH_KEY" >> /home/$USERNAME/.ssh/authorized_keys
+   cat $PUBLIC_SSH_KEY >> /home/$USERNAME/.ssh/authorized_keys
 	 chmod 600 /home/$USERNAME/.ssh/authorized_keys
    chown -R $USERNAME:$USERNAME /home/$USERNAME/.ssh
    # change ssh settings
@@ -105,6 +111,8 @@ function addUser(){
 	 alias clc='clear'
 	 alias netuse='slurm -i eth0'
 	 PS1='\[\e[1;91m\][\u@\h \w]\$\[\e[0m\]'" >> /home/$USERNAME/.bashrc
+	 echo "alias ll='ls -lah'" >> /root/.bashrc
+	 source /root/.bashrc
    # set up firewall
    apt-get install ufw
    echo "Disable IPv6 through Firewall? [1/2]"
@@ -118,7 +126,7 @@ function addUser(){
    ufw --force enable
 }
 
-function installOpenVPN(){
+function installOpenVPN() {
 	 clear
    echo "########## OpenVPN Installation ##########"
    echo "Please specify the port you want for OpenVPN, and later you will be asked again"
@@ -131,7 +139,7 @@ function installOpenVPN(){
 	 rm ./openvpn-install.sh
 }
 
-function installIPsec(){
+function installIPsec() {
 	 clear
 	 echo "########## IPsec/L2TP Installation ##########"
    ufw allow 500
@@ -141,7 +149,7 @@ function installIPsec(){
 	 rm vpnsetup.sh
 }
 
-function installDocker(){
+function installDocker() {
 	 clear
 	 echo "########## Docker Installation ##########"
    #uninstall old versions
@@ -166,7 +174,7 @@ function installDocker(){
    usermod -aG docker $USERNAME
 }
 
-function installCloudTorrent(){
+function installCloudTorrent() {
 	 clear
    echo "########## Cloud-Torrent Installation ##########"
    read -p "Please enter web auth user name: " username
@@ -179,7 +187,7 @@ function installCloudTorrent(){
    #ufw allow 50007 # incoming port
 }
 
-function installBaiduPCsGo(){
+function installBaiduPCsGo() {
 	 clear
 	 echo "########## BaiduPCS-Go Installation ##########"
 	 apt-get install p7zip-full
@@ -194,9 +202,9 @@ function installBaiduPCsGo(){
    ./BaiduPCS-Go config set -cache_size 100000 -max_parallel 300 -savedir /home/$USERNAME/download
 }
 
-#function installWebhook(){
+#function installWebhook() {
    # will add this later
 #}
 
-#function installRclone(){
+#function installRclone() {
 #}
