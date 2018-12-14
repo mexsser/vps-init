@@ -32,10 +32,12 @@ function addUser(){
 
    # add user
 	 apt-get install whois
+	 apt-get remove --purge unscd
+	 userdel -r debian
    /usr/sbin/useradd -m -G users -s /bin/bash $USERNAME
    PASSWARD_EPT=$(mkpasswd $PASSWARD)
    usermod --password $PASSWARD_EPT $USERNAME
-   if [$AS_SUDO_USER = true]; then
+   if ["$AS_SUDO_USER" = true]; then
      usermod -aG sudo $USERNAME
    fi
    # add ssh key
