@@ -89,9 +89,9 @@ function installBaiduPCsGo(){
    ./BaiduPCS-Go config set -cache_size 100000 -max_parallel 300 -savedir /home/$USERNAME/download
 }
 
-function install webhook(){
+#function installWebhook(){
    # will add this later
-}
+#}
 
 function addUser(){
 
@@ -134,21 +134,18 @@ function addUser(){
    # disable root login
    sed -re 's/^(\#?)(PermitRootLogin)([[:space:]]+)(.*)/PermitRootLogin no/' -i /etc/ssh/sshd_config
    # keep ssh session alive
-   cat <<EOT >> /etc/ssh/sshd_config
-   ClientAliveInterval 300
-   ClientAliveCountMax 2
-   EOT
+   cat "ClientAliveInterval 300
+	 ClientAliveCountMax 2" >> /etc/ssh/sshd_config
+
    service ssh restart
    #install htop and slurm
    apt-get install htop slurm
    # add alias
-   cat <<EOT >> /home/$USERNAME/.bashrc
-   alias ll='ls -lah'
-   alias disk='df -h'
-   alias clc='clear'
-   alias netuse='slurm -i eth0'
-   PS1='\[\e[1;91m\][\u@\h \w]\$\[\e[0m\]'
-   EOT
+   cat "alias ll='ls -lah'
+	 alias disk='df -h'
+	 alias clc='clear'
+	 alias netuse='slurm -i eth0'
+	 PS1='\[\e[1;91m\][\u@\h \w]\$\[\e[0m\]'" >> /home/$USERNAME/.bashrc
 
    # set up firewall
    apt-get install ufw
