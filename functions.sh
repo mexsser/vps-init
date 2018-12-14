@@ -25,12 +25,6 @@ function Menu () {
 	esac
 }
 
-function getCurrentDir() {
-    local current_dir="${BASH_SOURCE%/*}"
-    if [[ ! -d "${current_dir}" ]]; then current_dir="$PWD"; fi
-    echo "${current_dir}"
-}
-
 function addUser() {
 	 clear
 	 echo "Did you set your root password?[1/2]"

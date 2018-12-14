@@ -1,7 +1,6 @@
 #!/bin/bash
 set -e
-current_dir=$(getCurrentDir)
-source $current_dir/functions.sh
+
 # ======= Your Data =========
 # host info
 HOST_NAME="DOVPS"
@@ -13,6 +12,14 @@ AS_SUDO_USER=false
 SSH_PORT="2020"
 # ============================
 
+function getCurrentDir() {
+    local current_dir="${BASH_SOURCE%/*}"
+    if [[ ! -d "${current_dir}" ]]; then current_dir="$PWD"; fi
+    echo "${current_dir}"
+}
+
+current_dir=$(getCurrentDir)
+source $current_dir/functions.sh
 WELCOME_MESSAGE="${current_dir}/welcome_message"
 PUBLIC_SSH_KEY="${current_dir}/publickey"
 
