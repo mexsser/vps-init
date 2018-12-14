@@ -11,7 +11,7 @@ chmod +x ./*.sh
 ```
 - Add your public key to ./publickey
 - Modify ./setup.sh to specify the new user name and password
-- Then run
+- Then run as __root__
 ```bash
 ./setup.sh
 ```
