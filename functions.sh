@@ -25,84 +25,16 @@ function Menu () {
 	esac
 }
 
-function installDocker(){
-   echo "########## Docker Installation ##########"
-   # uninstall old versions
-   apt-get remove docker docker-engine docker.io
-   apt-get install \
-        apt-transport-https \
-        ca-certificates \
-        curl \
-        gnupg2 \
-        software-properties-common
-   curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
-   add-apt-repository \
-      "deb [arch=amd64] https://download.docker.com/linux/debian \
-      $(lsb_release -cs) \
-      stable"
-   apt-get update
-   apt-get install docker-ce
-   # run docker as non-root
-   groupadd docker
-   usermod -aG docker $USERNAME
-}
-
-function installCloudTorrent(){
-   echo "########## Cloud-Torrent Installation ##########"
-   local username=${1}
-   local password=${2}
-   local port=${3}
-   mkdir /home/$USERNAME/download
-   chown -R $USERNAME:users /home/$USERNAME/download
-   docker run --user $(id -u $USERNAME):$(id -g $USERNAME) -d -p $port:$port \
-   -v /home/$USERNAME/download:/downloads jpillora/cloud-torrent --port $port -a "$username:$password"
-   ufw allow 21 # use port 21 for
-}
-
-function installOpenVPN(){
-   echo "########## OpenVPN Installation ##########"
-   echo "Please specify the port you want for OpenVPN, and later you will be asked again"
-   read -p "Port number: " port
-   ufw allow $port
-   curl -O https://raw.githubusercontent.com/Angristan/openvpn-install/master/openvpn-install.sh
-   chmod +x openvpn-install.sh
-   ./openvpn-install.sh
-}
-
-function installIPsec(){
-   ufw allow 500
-   ufw allow 1701
-   ufw allow 4500
-   wget https://git.io/vpnsetup -O vpnsetup.sh && sh vpnsetup.sh
-}
-
-function installBaiduPCsGo(){
-   apt-get install p7zip-full
-   mkdir /home/$USERNAME/baidupcs
-   chown -R $USERNAME:users /home/$USERNAME/baidupcs
-   cd /home/$USERNAME/baidupcs
-   wget https://github.com/iikira/BaiduPCS-Go/releases/download/v3.5.6/BaiduPCS-Go-v3.5.6-linux-amd64.zip
-   7z e *.zip
-   rm -r ./BaiduPCS-Go-v*
-   ./BaiduPCS-Go config set -appid 265486
-   ./BaiduPCS-Go config set -enable_https=true
-   ./BaiduPCS-Go config set -cache_size 100000 -max_parallel 300 -savedir /home/$USERNAME/download
-}
-
-#function installWebhook(){
-   # will add this later
-#}
-
 function addUser(){
-
    # change host name and welcome message
    echo "$HOST_NAME" > /etc/hostname
    cat $WELCOME_MESSAGE > /etc/motd
 
    # add user
+	 apt-get install whois
    /usr/sbin/useradd -m -G users -s /bin/bash $USERNAME
-   PASSWARD_EPT=$(makepasswd $PASSWARD)
-   usermod -- password $PASSWARD_EPT $USERNAME
+   PASSWARD_EPT=$(mkpasswd $PASSWARD)
+   usermod --password $PASSWARD_EPT $USERNAME
    if [$AS_SUDO_USER = true]; then
      usermod -aG sudo $USERNAME
    fi
@@ -159,3 +91,71 @@ function addUser(){
    ufw allow $SSH_PORT
    ufw --force enable
 }
+
+function installOpenVPN(){
+   echo "########## OpenVPN Installation ##########"
+   echo "Please specify the port you want for OpenVPN, and later you will be asked again"
+   read -p "Port number: " port
+   ufw allow $port
+   curl -O https://raw.githubusercontent.com/Angristan/openvpn-install/master/openvpn-install.sh
+   chmod +x openvpn-install.sh
+   ./openvpn-install.sh
+}
+
+function installIPsec(){
+   ufw allow 500
+   ufw allow 1701
+   ufw allow 4500
+   wget https://git.io/vpnsetup -O vpnsetup.sh && sh vpnsetup.sh
+}
+
+function installDocker(){
+   echo "########## Docker Installation ##########"
+   # uninstall old versions
+   apt-get remove docker docker-engine docker.io
+   apt-get install \
+        apt-transport-https \
+        ca-certificates \
+        curl \
+        gnupg2 \
+        software-properties-common
+   curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+   add-apt-repository \
+      "deb [arch=amd64] https://download.docker.com/linux/debian \
+      $(lsb_release -cs) \
+      stable"
+   apt-get update
+   apt-get install docker-ce
+   # run docker as non-root
+   groupadd docker
+   usermod -aG docker $USERNAME
+}
+
+function installCloudTorrent(){
+   echo "########## Cloud-Torrent Installation ##########"
+   local username=${1}
+   local password=${2}
+   local port=${3}
+   mkdir /home/$USERNAME/download
+   chown -R $USERNAME:users /home/$USERNAME/download
+   docker run --user $(id -u $USERNAME):$(id -g $USERNAME) -d -p $port:$port \
+   -v /home/$USERNAME/download:/downloads jpillora/cloud-torrent --port $port -a "$username:$password"
+   ufw allow 21 # use port 21 for
+}
+
+function installBaiduPCsGo(){
+   apt-get install p7zip-full
+   mkdir /home/$USERNAME/baidupcs
+   chown -R $USERNAME:users /home/$USERNAME/baidupcs
+   cd /home/$USERNAME/baidupcs
+   wget https://github.com/iikira/BaiduPCS-Go/releases/download/v3.5.6/BaiduPCS-Go-v3.5.6-linux-amd64.zip
+   7z e *.zip
+   rm -r ./BaiduPCS-Go-v*
+   ./BaiduPCS-Go config set -appid 265486
+   ./BaiduPCS-Go config set -enable_https=true
+   ./BaiduPCS-Go config set -cache_size 100000 -max_parallel 300 -savedir /home/$USERNAME/download
+}
+
+#function installWebhook(){
+   # will add this later
+#}
