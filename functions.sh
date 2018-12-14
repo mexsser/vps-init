@@ -127,7 +127,8 @@ function installOpenVPN(){
 	 apt-get install curl
    curl -O https://raw.githubusercontent.com/Angristan/openvpn-install/master/openvpn-install.sh
    chmod +x openvpn-install.sh
-   ./openvpn-install.sh
+   ./openvpn-install.sh && \
+	 rm ./openvpn-install.sh
 }
 
 function installIPsec(){
@@ -136,7 +137,8 @@ function installIPsec(){
    ufw allow 500
    ufw allow 1701
    ufw allow 4500
-   wget https://git.io/vpnsetup -O vpnsetup.sh && sh vpnsetup.sh
+   wget https://git.io/vpnsetup -O vpnsetup.sh && sh vpnsetup.sh && \
+	 rm vpnsetup.sh
 }
 
 function installDocker(){
