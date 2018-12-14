@@ -26,6 +26,7 @@ function Menu () {
 }
 
 function addUser(){
+	 clear
 	 echo "Did you set your root password?[1/2]"
 	 select op in "Yes" "NO"; do
 			 case $op in
@@ -74,13 +75,14 @@ function addUser(){
    sed -re 's@^(\#?)(LoginGraceTime)([[:space:]]+)(.*)@LoginGraceTime 10@' -i /etc/ssh/sshd_config
    sed -re 's@^(\#?)(MaxAuthTries)([[:space:]]+)(.*)@MaxAuthTries 2@' -i /etc/ssh/sshd_config
    sed -re 's@^(\#?)(MaxSessions)([[:space:]]+)(.*)@MaxSessions 3@' -i /etc/ssh/sshd_config
-   echo "AllowUsers $USERNAME" >> /etc/ssh/sshd_config
+	 echo "" >> /etc/ssh/sshd_config
+	 echo "AllowUsers $USERNAME" >> /etc/ssh/sshd_config
 	 #echo "RSAAuthentication yes" >> /etc/ssh/sshd_config
    service sshd restart
    # ask if the new user can successfully login using public key
    echo "Can you login ssh with the newly created user and its public key? [1/2]"
-   select yn in "Yes" "No"; do
-       case $yn in
+   select op in "Yes" "No"; do
+       case $op in
            Yes ) echo "Ok, continue..."; break;;
            No ) echo "The created user will be deleted. Please modify this script and run it again.";
                 userdel -r $USERNAME;
@@ -117,6 +119,7 @@ function addUser(){
 }
 
 function installOpenVPN(){
+	 clear
    echo "########## OpenVPN Installation ##########"
    echo "Please specify the port you want for OpenVPN, and later you will be asked again"
    read -p "Port number: " port
@@ -128,6 +131,8 @@ function installOpenVPN(){
 }
 
 function installIPsec(){
+	 clear
+	 echo "########## IPsec/L2TP Installation ##########"
    ufw allow 500
    ufw allow 1701
    ufw allow 4500
@@ -135,7 +140,8 @@ function installIPsec(){
 }
 
 function installDocker(){
-   echo "########## Docker Installation ##########"
+	 clear
+	 echo "########## Docker Installation ##########"
    #uninstall old versions
    # apt-get remove docker docker-engine docker.io
    apt-get install \
@@ -159,6 +165,7 @@ function installDocker(){
 }
 
 function installCloudTorrent(){
+	 clear
    echo "########## Cloud-Torrent Installation ##########"
    read -p "Please enter web auth user name: " username
    read -p "Please enter web auth user password: " password
@@ -171,7 +178,9 @@ function installCloudTorrent(){
 }
 
 function installBaiduPCsGo(){
-   apt-get install p7zip-full
+	 clear
+	 echo "########## BaiduPCS-Go Installation ##########"
+	 apt-get install p7zip-full
    mkdir /home/$USERNAME/baidupcs
    cd /home/$USERNAME/baidupcs
    wget https://github.com/iikira/BaiduPCS-Go/releases/download/v3.5.6/BaiduPCS-Go-v3.5.6-linux-amd64.zip
