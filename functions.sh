@@ -43,9 +43,11 @@ function addUser(){
    chmod 700 /home/$USERNAME/.ssh
    touch /home/$USERNAME/.ssh/authorized_keys
    echo "$PUBLIC_SSH_KEY" >> /home/$USERNAME/.ssh/authorized_keys
-
+	 chmod 600 /home/$USERNAME/.ssh/authorized_keys
    # change ssh settings
    sed -re 's/^(\#?)(PasswordAuthentication)([[:space:]]+)yes/\2\3no/' -i."$(echo 'old')" /etc/ssh/sshd_config
+	 sed -re 's/^(\#?)(PubkeyAuthentication)([[:space:]]+)(.*)/PubkeyAuthentication yes/' -i /etc/ssh/sshd_config
+	 sed -re 's/^(\#?)(AuthorizedKeysFile)([[:space:]]+)(.*)/AuthorizedKeysFile  ~/.ssh/authorized_keys/' -i /etc/ssh/sshd_config
    sed -re 's/^(\#?)(Port)([[:space:]]+)(.*)/Port $SSH_PORT/' -i /etc/ssh/sshd_config
    sed -re 's/^(\#?)(LoginGraceTime)([[:space:]]+)(.*)/LoginGraceTime 10/' -i /etc/ssh/sshd_config
    sed -re 's/^(\#?)(MaxAuthTries)([[:space:]]+)(.*)/MaxAuthTries 2/' -i /etc/ssh/sshd_config
@@ -66,8 +68,8 @@ function addUser(){
    # disable root login
    sed -re 's/^(\#?)(PermitRootLogin)([[:space:]]+)(.*)/PermitRootLogin no/' -i /etc/ssh/sshd_config
    # keep ssh session alive
-   cat "ClientAliveInterval 300
-	 ClientAliveCountMax 2" >> /etc/ssh/sshd_config
+   sed -re 's/^(\#?)(ClientAliveInterval)([[:space:]]+)(.*)/ClientAliveInterval 300/' -i /etc/ssh/sshd_config
+	 cat "ClientAliveCountMax 2" >> /etc/ssh/sshd_config
 
    service ssh restart
    #install htop and slurm
