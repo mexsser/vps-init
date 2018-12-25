@@ -211,23 +211,24 @@ function installRclone() {
 	cd /tmp
 	wget -O '/tmp/rclone.zip' "https://downloads.rclone.org/rclone-current-linux-$KernelBitVer.zip"
 	7z x /tmp/rclone.zip
-	cd rclone
+	cd rclone-*
 	cp -raf rclone /usr/bin/
 	chown root:root /usr/bin/rclone
 	chmod 755 /usr/bin/rclone
 	mkdir -p /usr/local/share/man/man1
 	cp -raf rclone.1 /usr/local/share/man/man1/
 	mandb
-	rm -rf /tmp/rclone*
+	rm -rf /tmp/rclon*
 	clear
 	rclone config
-	su -c "mkdir /home/$USERNAME/GDrive" $USERNAME
+	su -c "mkdir -p /home/$USERNAME/GDrive" $USERNAME
 	read -p "Please re-enter the remote drive name: " drivename
 	read -p "Please enter the remote folder name in your google drive: " foldername
-	mountrc="rclone mount $drivename:$foldername /home/$USERNAME/GDrive --copy-links --no-gzip-encoding \
-	--no-check-certificate --allow-other --allow-non-empty --umask 000"
+	mountrc="rclone mount $drivename:$foldername /home/$USERNAME/GDrive --copy-links --no-gzip-encoding --no-check-certificate --allow-other --allow-non-empty --umask 000 &"
 	eval $mountrc
 	crontab -l | { cat; echo "@reboot $mountrc"; } | crontab -
-	echo "Now Google Drive is mounted at /home/$USERNAME/GDrive"
-	echo "df -h"
+	echo "### Now Google Drive is mounted at /home/$USERNAME/GDrive ###"
+	echo ""
+	echo "--- Disk Info ---"
+	df -h
 }

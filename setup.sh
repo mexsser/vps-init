@@ -27,5 +27,5 @@ source $current_dir/functions.sh
 # update system
 apt-get update
 apt-get upgrade -y
-
+apt-get install man-db
 Menu
