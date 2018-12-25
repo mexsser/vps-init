@@ -1,6 +1,6 @@
 # VPS Post-Install Script
 **Tested Platform**
-- Debian VPS from Digital Ocean
+- Debian 8 or higher from Digital Ocean
 
 **Usage**
 - First download this project and make all .sh files executable:
@@ -23,12 +23,13 @@ chmod +x ./*.sh
 4. Install [Docker CE](https://docs.docker.com/install/linux/docker-ce/debian/)
 5. Install [Cloud-Torrent](https://github.com/jpillora/cloud-torrent)
 6. Install [BaiduPCS-Go](https://github.com/iikira/BaiduPCS-Go)
+7. Install [rclone](https://rclone.org/) to mount Googel Drive as a local disk
+
 
 **To Do**
-1. Install [rclone](https://rclone.org/) to mount Googel Drive as a local disk
-2. Install [webhook](https://github.com/adnanh/webhook) to play with [IFTTT](https://ifttt.com/)
-3. Setup Nginx server
-4. Setup a [reverse server](https://jixun.moe/post/ymusic-hosts-fix/) to use Netease Cloud Music out of China
+1. Install [webhook](https://github.com/adnanh/webhook) to play with [IFTTT](https://ifttt.com/)
+2. Setup Nginx server and cert-bot
+3. Setup a [reverse server](https://jixun.moe/post/ymusic-hosts-fix/) to use Netease Cloud Music out of China
 
 **Inspired by**
 1. [jasonheecs](https://github.com/jasonheecs/ubuntu-server-setup)

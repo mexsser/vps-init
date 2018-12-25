@@ -9,9 +9,10 @@ function Menu () {
 	echo "   4) Install Docker"
 	echo "   5) Install Cloud-Torrent"
 	echo "   6) Install BaiduPCS-Go"
-	echo "   7) Exit"
-	until [[ "$MENU_OPTION" =~ ^[1-7]$ ]]; do
-		read -rp "Select an option [1-7]: " MENU_OPTION
+	echo "   7) Mount Google Drive"
+	echo "   8) Exit"
+	until [[ "$MENU_OPTION" =~ ^[1-8]$ ]]; do
+		read -rp "Select an option [1-8]: " MENU_OPTION
 	done
 
 	case $MENU_OPTION in
@@ -21,7 +22,8 @@ function Menu () {
 		4) installDocker ;;
 		5) installCloudTorrent ;;
 		6) installBaiduPCsGo ;;
-		7) exit 0
+		7) installRclone ;;
+		8) exit 0
 	esac
 }
 
@@ -200,5 +202,32 @@ function installBaiduPCsGo() {
    # will add this later
 #}
 
-#function installRclone() {
-#}
+function installRclone() {
+	apt-get install -y nload fuse p7zip-full
+	KernelBit="$(getconf LONG_BIT)"
+	[[ "$KernelBit" == '32' ]] && KernelBitVer='i386'
+	[[ "$KernelBit" == '64' ]] && KernelBitVer='amd64'
+	[[ -z "$KernelBitVer" ]] && exit 1
+	cd /tmp
+	wget -O '/tmp/rclone.zip' "https://downloads.rclone.org/rclone-current-linux-$KernelBitVer.zip"
+	7z x /tmp/rclone.zip
+	cd rclone
+	cp -raf rclone /usr/bin/
+	chown root:root /usr/bin/rclone
+	chmod 755 /usr/bin/rclone
+	mkdir -p /usr/local/share/man/man1
+	cp -raf rclone.1 /usr/local/share/man/man1/
+	mandb
+	rm -rf /tmp/rclone*
+	clear
+	rclone config
+	su -c "mkdir /home/$USERNAME/GDrive" $USERNAME
+	read -p "Please re-enter the remote drive name: " drivename
+	read -p "Please enter the remote folder name in your google drive: " foldername
+	mountrc="rclone mount $drivename:$foldername /home/$USERNAME/GDrive --copy-links --no-gzip-encoding \
+	--no-check-certificate --allow-other --allow-non-empty --umask 000"
+	eval $mountrc
+	crontab -l | { cat; echo "@reboot $mountrc"; } | crontab -
+	echo "Now Google Drive is mounted at /home/$USERNAME/GDrive"
+	echo "df -h"
+}

@@ -9,7 +9,7 @@ USERNAME="test"
 PASSWARD='k?j0r_g^39Ge2'
 AS_SUDO_USER=false
 # ssh info
-SSH_PORT="2020"
+SSH_PORT="2222"
 # ============================
 
 function getCurrentDir() {
