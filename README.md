@@ -29,7 +29,8 @@ chmod +x ./*.sh
 **To Do**
 1. Install [webhook](https://github.com/adnanh/webhook) to play with [IFTTT](https://ifttt.com/)
 2. Setup Nginx server and cert-bot
-3. Setup a [reverse server](https://jixun.moe/post/ymusic-hosts-fix/) to use Netease Cloud Music out of China
+3. Setup [reverse server](https://github.com/nondanee/UnblockNeteaseMusic) to use Netease Cloud Music out of China
+4. Setup [v2ray server](https://github.com/v2ray/v2ray-core)
 
 **Inspired by**
 1. [jasonheecs](https://github.com/jasonheecs/ubuntu-server-setup)
