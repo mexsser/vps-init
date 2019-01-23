@@ -31,6 +31,8 @@ chmod +x ./*.sh
 2. Setup Nginx server and cert-bot
 3. Setup [reverse server](https://github.com/nondanee/UnblockNeteaseMusic) to use Netease Cloud Music out of China
 4. Setup [v2ray server](https://github.com/v2ray/v2ray-core)
+5. Setup a [mirror of google](https://lius.me/blog/2018/03/28/搭建Google镜像/) with ssl and basic authentication
+
 
 **Inspired by**
 1. [jasonheecs](https://github.com/jasonheecs/ubuntu-server-setup)
