@@ -263,7 +263,7 @@ function UnblockNeteaseMusic() {
 	apt-get install curl software-properties-common git
 	curl -sL https://deb.nodesource.com/setup_10.x | bash -
 	apt-get install nodejs
-	git clone https://github.com/nondanee/UnblockNeteaseMusic
+	git clone https://github.com/mexsser/unblockneteasemusic
 	read -p "Please specify the port number used for the Node.js proxy: " PORT
 	nohup node ./UnblockNeteaseMusic/app.js -p $PORT --strict >/dev/null 2>&1
 	ufw allow $PORT
