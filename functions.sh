@@ -29,11 +29,18 @@ function Menu () {
 
 function addUser() {
 	 clear
-	 echo "Did you set your root password?[1/2]"
+	 echo "Have you set your root password yet?[1/2]"
 	 select op in "Yes" "NO"; do
 		 case $op in
 			 Yes ) break;;
 			 NO ) passwd root;break;;
+		 esac
+	 done
+	 echo "Have you modified the name and password of the new user in 'setup.sh'?[1/2]"
+	 select op in "Yes" "NO"; do
+		 case $op in
+			 Yes ) echo "Ok, continue..."; break;;
+			 NO ) exit;;
 		 esac
 	 done
    # change host name and welcome message
@@ -62,7 +69,7 @@ function addUser() {
      usermod -aG sudo $USERNAME
    fi
    # add ssh key
-   mkdir /home/$USERNAME/.ssh
+   mkdir -p /home/$USERNAME/.ssh
    chmod 700 /home/$USERNAME/.ssh
    touch /home/$USERNAME/.ssh/authorized_keys
    cat $PUBLIC_SSH_KEY >> /home/$USERNAME/.ssh/authorized_keys
@@ -176,10 +183,10 @@ function installCloudTorrent() {
 	read -p "Please enter web auth user name: " username
 	read -p "Please enter web auth user password: " password
 	read -p "Please enter web port: " port
-	mkdir /home/$USERNAME/download
+	mkdir -p /home/$USERNAME/download
 	chown -R $USERNAME:users /home/$USERNAME/download
 	docker run --user $(id -u $USERNAME):$(id -g $USERNAME) -d -p $port:$port \
-	-v /home/$USERNAME/download:/downloads jpillora/cloud-torrent --port $port -a "$username:$password"
+	-v /home/$USERNAME/download:/downloads --log-opt max-size=10m --log-opt max-file=5 jpillora/cloud-torrent --port $port -a "$username:$password"
 	#ufw allow 50007 # incoming port
 }
 
@@ -187,7 +194,7 @@ function installBaiduPCsGo() {
 	clear
 	echo "########## BaiduPCS-Go Installation ##########"
 	apt-get install p7zip-full
-	mkdir /home/$USERNAME/baidupcs
+	mkdir -p /home/$USERNAME/baidupcs
 	cd /home/$USERNAME/baidupcs
 	wget https://github.com/iikira/BaiduPCS-Go/releases/download/v3.5.6/BaiduPCS-Go-v3.5.6-linux-amd64.zip
 	7z e *.zip
