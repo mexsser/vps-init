@@ -4,26 +4,28 @@ function Menu () {
 	echo "Welcome to VPS-Init!"
 	echo "What do you want to do?"
 	echo "   1) Add a new user"
-	echo "   2) Setup OpenVPN"
-	echo "   3) Setup IPsec/L2TP"
-	echo "   4) Install Docker"
-	echo "   5) Install Cloud-Torrent"
-	echo "   6) Install BaiduPCS-Go"
-	echo "   7) Mount Google Drive"
-	echo "   8) Exit"
+	echo "   2) Add Swap"
+	echo "   3) Setup OpenVPN"
+	echo "   4) Setup IPsec/L2TP"
+	echo "   5) Install Docker"
+	echo "   6) Install Cloud-Torrent"
+	echo "   7) Install BaiduPCS-Go"
+	echo "   8) Mount Google Drive"
+	echo "   9) Exit"
 	until [[ "$MENU_OPTION" =~ ^[1-8]$ ]]; do
 		read -rp "Select an option [1-8]: " MENU_OPTION
 	done
 
 	case $MENU_OPTION in
 		1) addUser ;;
-		2) installOpenVPN ;;
-		3) installIPsec ;;
-		4) installDocker ;;
-		5) installCloudTorrent ;;
-		6) installBaiduPCsGo ;;
-		7) installRclone ;;
-		8) exit 0
+		2) addSwap ;;
+		3) installOpenVPN ;;
+		4) installIPsec ;;
+		5) installDocker ;;
+		6) installCloudTorrent ;;
+		7) installBaiduPCsGo ;;
+		8) installRclone ;;
+		9) exit 0
 	esac
 }
 
@@ -127,6 +129,20 @@ function addUser() {
    done
    ufw allow $SSH_PORT
    ufw --force enable
+}
+
+function addSwap() {
+	clear
+	echo "########## Add Swap ##########"
+	read -p "The size of swap space you need(e.g. 1G):" SIZE
+	fallocate -l $SIZE /swapfile
+	chmod 600 /swapfile
+	mkswap /swapfile
+	swapon /swapfile
+	echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
+	sysctl vm.swappiness=40
+	echo "Swap Info:"
+	swapon --show
 }
 
 function installOpenVPN() {
