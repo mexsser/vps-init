@@ -263,7 +263,9 @@ gclonecd() {
 }
 
 function UnblockNeteaseMusic() {
-	apt-get install git
+	apt-get install curl software-properties-common git
+	curl -sL https://deb.nodesource.com/setup_10.x | bash -
+	apt-get install nodejs
 	gclonecd https://github.com/nondanee/UnblockNeteaseMusic
 	read -p "Please specify the port number used for the Node.js proxy: " PORT
 	nohup node ./app.js -p $PORT --strict >/dev/null 2>&1
