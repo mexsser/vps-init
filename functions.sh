@@ -259,17 +259,13 @@ function installRclone() {
 	df -h
 }
 
-gclonecd() {
-  git clone "$1" && cd "$(basename "$1" .git)"
-}
-
 function UnblockNeteaseMusic() {
 	apt-get install curl software-properties-common git
 	curl -sL https://deb.nodesource.com/setup_10.x | bash -
 	apt-get install nodejs
-	gclonecd https://github.com/nondanee/UnblockNeteaseMusic
+	git clone https://github.com/nondanee/UnblockNeteaseMusic
 	read -p "Please specify the port number used for the Node.js proxy: " PORT
-	nohup node ./app.js -p $PORT --strict >/dev/null 2>&1
+	nohup node ./UnblockNeteaseMusic/app.js -p $PORT --strict >/dev/null 2>&1
 	ufw allow $PORT
 	echo "Setup finished."
 	echo "The configuration on the client side can be found in https://github.com/nondanee/UnblockNeteaseMusic"
