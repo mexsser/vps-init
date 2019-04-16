@@ -13,8 +13,8 @@ function Menu () {
 	echo "   8) Mount Google Drive"
 	echo "   9) Unblock Netease Music"
 	echo "   10) Exit"
-	until [[ "$MENU_OPTION" =~ ^[1-8]$ ]]; do
-		read -rp "Select an option [1-8]: " MENU_OPTION
+	until [[ "$MENU_OPTION" =~ ^[1-10]$ ]]; do
+		read -rp "Select an option [1-10]: " MENU_OPTION
 	done
 
 	case $MENU_OPTION in
