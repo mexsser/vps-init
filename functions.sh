@@ -11,7 +11,8 @@ function Menu () {
 	echo "   6) Install Cloud-Torrent"
 	echo "   7) Install BaiduPCS-Go"
 	echo "   8) Mount Google Drive"
-	echo "   9) Exit"
+	echo "   9) Unblock Netease Music"
+	echo "   10) Exit"
 	until [[ "$MENU_OPTION" =~ ^[1-8]$ ]]; do
 		read -rp "Select an option [1-8]: " MENU_OPTION
 	done
@@ -25,7 +26,8 @@ function Menu () {
 		6) installCloudTorrent ;;
 		7) installBaiduPCsGo ;;
 		8) installRclone ;;
-		9) exit 0
+		9) UnblockNeteaseMusic ;;
+		10) exit 0
 	esac
 }
 
@@ -254,4 +256,17 @@ function installRclone() {
 	echo ""
 	echo "--- Disk Info ---"
 	df -h
+}
+
+gclonecd() {
+  git clone "$1" && cd "$(basename "$1" .git)"
+}
+
+function UnblockNeteaseMusic() {
+	apt-get install git
+	gclonecd https://github.com/nondanee/UnblockNeteaseMusic
+	read -p "Please specify the port number used for the Node.js proxy: " PORT
+	nohup node ./app.js -p $PORT --strict >/dev/null 2>&1
+	echo "Setup finished."
+	echo "The configuration on the client side can be found in https://github.com/nondanee/UnblockNeteaseMusic"
 }
