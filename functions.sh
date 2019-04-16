@@ -265,7 +265,7 @@ function UnblockNeteaseMusic() {
 	apt-get install nodejs
 	git clone https://github.com/mexsser/unblockneteasemusic
 	read -p "Please specify the port number used for the Node.js proxy: " PORT
-	nohup node ./unblockneteasemusic/app.js -p $PORT --strict >/dev/null 2>&1
+	(nohup node ./unblockneteasemusic/app.js -p $PORT --strict > nohop.log &) >/dev/null 2>&1
 	ufw allow $PORT
 	echo "Setup finished."
 	echo "The configuration on the client side can be found in https://github.com/nondanee/UnblockNeteaseMusic"
