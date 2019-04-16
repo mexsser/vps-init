@@ -13,9 +13,10 @@ function Menu () {
 	echo "   8) Mount Google Drive"
 	echo "   9) Unblock Netease Music"
 	echo "   10) Exit"
-	until [[ "$MENU_OPTION" =~ ^[1-10]$ ]]; do
-		read -rp "Select an option [1-10]: " MENU_OPTION
+	until [[ "$MENU_OPTION" =~ ^[0-9]+$ ]] && [ "$MENU_OPTION" -ge 1 -a "$MENU_OPTION" -le 10 ]; do
+					read -rp "Select an option [1-10]: " MENU_OPTION
 	done
+
 
 	case $MENU_OPTION in
 		1) addUser ;;
@@ -269,6 +270,7 @@ function UnblockNeteaseMusic() {
 	gclonecd https://github.com/nondanee/UnblockNeteaseMusic
 	read -p "Please specify the port number used for the Node.js proxy: " PORT
 	nohup node ./app.js -p $PORT --strict >/dev/null 2>&1
+	ufw allow $PORT
 	echo "Setup finished."
 	echo "The configuration on the client side can be found in https://github.com/nondanee/UnblockNeteaseMusic"
 }
