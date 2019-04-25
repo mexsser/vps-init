@@ -35,6 +35,7 @@ chmod +x ./*.sh
 2. Setup Nginx server and cert-bot
 3. Setup [v2ray server](https://github.com/v2ray/v2ray-core)
 4. Setup a [mirror of google](https://lius.me/blog/2018/03/28/搭建Google镜像/) with ssl and basic authentication
+5. Setup [MTProxy](https://github.com/TelegramMessenger/MTProxy) for Telegram client
 
 
 **Inspired by**
